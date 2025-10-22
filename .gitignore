@@ -35,7 +35,7 @@ migrations/versions/__pycache__/
 
 # Node / frontend (якщо є React/Vite)
 node_modules/
-dist/
+# dist/
 build/
 *.lock
 
