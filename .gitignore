@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Venv / virtualenv
+venv/
+.env/
+.env.*
+
+# IDE / editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+*.sqlite
+
+# Migrations (Alembic)
+migrations/versions/*.pyc
+migrations/versions/__pycache__/
+
+# Node / frontend (якщо є React/Vite)
+node_modules/
+dist/
+build/
+*.lock
+
+# FastAPI specific (optional)
+*.env.local
