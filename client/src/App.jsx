@@ -185,7 +185,7 @@ export default function ClickTracker() {
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [darkMode, setDarkMode] = useState(false);
 
-  const API_BASE = 'http://localhost:8000';
+  const API_BASE = 'https://interner-provider-click.onrender.com';
 
   // Завантаження теми з localStorage при монтуванні
   useEffect(() => {
