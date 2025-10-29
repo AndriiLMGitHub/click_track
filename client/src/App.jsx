@@ -185,8 +185,8 @@ export default function ClickTracker() {
   const [itemsPerPage, setItemsPerPage] = useState(9);
   const [darkMode, setDarkMode] = useState(false);
 
-  const API_BASE = 'https://interner-provider-click.onrender.com';
-  // const API_BASE = 'http://localhsot:8000'
+  // const API_BASE = 'https://interner-provider-click.onrender.com';
+  const API_BASE = 'http://127.0.0.1:8000'
 
   // Завантаження теми з localStorage при монтуванні
   useEffect(() => {
@@ -239,7 +239,7 @@ export default function ClickTracker() {
       });
 
       if (response.ok) {
-        showAlert('success', `Клік успішно зареєстровано!`);
+        showAlert('success', `Посилання успішно зареєстровано!`);
         loadData();
         setCurrentPage(1);
       } else {
@@ -247,7 +247,7 @@ export default function ClickTracker() {
       }
     } catch (error) {
       console.error('Помилка:', error);
-      showAlert('error', 'Не вдалося зареєструвати клік');
+      showAlert('error', 'Не вдалося зареєструвати посилання');
     }
   };
 
@@ -258,7 +258,7 @@ export default function ClickTracker() {
       });
 
       if (response.ok) {
-        showAlert('success', 'Запис успішно видалено!');
+        showAlert('success', 'Посилання успішно видалено!');
         setDeleteModal({ isOpen: false, clickData: null });
         loadData();
       } else {
@@ -458,13 +458,53 @@ export default function ClickTracker() {
                     {/* Локація */}
                     <div className="flex items-start gap-2 mb-3">
                       <MapPin className={`w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'} mt-0.5 flex-shrink-0`} />
-                      <div>
+                      <div className="flex-1">
                         <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                           {click.city}, {click.region}
                         </p>
-                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{click.country}</p>
+                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {click.country} {click.zip && `• ZIP: ${click.zip}`}
+                        </p>
+                        {(click.lat && click.lon) && (
+                          <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'} font-mono`}>
+                            {click.lat}, {click.lon}
+                          </p>
+                        )}
                       </div>
                     </div>
+
+                    {/* Timezone */}
+                    {click.timezone && (
+                      <div className="flex items-center gap-2 mb-3">
+                        <Clock className={`w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                        <div>
+                          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Часовий пояс</p>
+                          <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{click.timezone}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ISP/ORG */}
+                    {(click.isp || click.org) && (
+                      <div className="flex items-start gap-2 mb-3">
+                        <Wifi className={`w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'} mt-0.5 flex-shrink-0`} />
+                        <div className="flex-1">
+                          {click.isp && (
+                            <>
+                              <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>ISP</p>
+                              <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-1`}>{click.isp}</p>
+                            </>
+                          )}
+                          {click.org && (
+                            <>
+                              <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Організація</p>
+                              <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{click.org}</p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
 
                     {/* Дати */}
                     <div className="space-y-2 mb-4">

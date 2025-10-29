@@ -2,9 +2,9 @@
     Main routes for click tracking API.
 
 """
-from services.clicks import add_click, create_click, get_all_clicks, get_click_by_ip, get_click_by_id, get_click_by_uuid, update_last_click, delete_click
+from services.clicks import add_click, create_click, get_all_clicks, get_click_by_id, get_click_by_uuid, update_last_click, delete_click
 from utils.get_user_info import get_client_ip, get_geolocation
-from schemas.click_shemas import ClickResponse
+from schemas.click_shemas import ClickResponse, ClickResponseValidate
 from dependencies.db_deps import get_db
 from uuid import uuid4
 from fastapi import Request, HTTPException, Depends, APIRouter
@@ -30,19 +30,42 @@ async def stats(db=Depends(get_db)):
     return [ClickResponse.model_validate(click) for click in clicks]
 
 
-@router.post("/", response_model=ClickResponse)
-async def register_click(request: Request, db=Depends(get_db)):
+@router.post("/", response_model=ClickResponseValidate)
+async def register_click(request: Request, db=Depends(get_db), uuid_link: str = None):
     ip = get_client_ip(request)
-    existing = await get_click_by_ip(db, ip)
+
+    existing = None
+    if uuid_link:
+        existing = await get_click_by_uuid(db, uuid_link)
 
     if existing:
-        click = await update_last_click(db, existing)
-        return ClickResponse.model_validate(click)
+        click = await update_last_click(db, existing, ip=ip)
+        return {
+            "message": "Click already exists, updated last click info",
+            "data": ClickResponse.model_validate(click)
+        }
 
+    # Створюємо новий клік
     user_uuid = str(uuid4())
     geo = await get_geolocation(ip)
-    click = await create_click(db, ip, user_uuid, geo)
-    return ClickResponse.model_validate(click)
+
+    extra_kwargs = {
+        "country": geo.get("country"),
+        "region": geo.get("region"),
+        "city": geo.get("city"),
+        "zip": geo.get("zip"),
+        "lat": geo.get("lat"),
+        "lon": geo.get("lon"),
+        "timezone": geo.get("timezone"),
+        "isp": geo.get("isp"),
+        "org": geo.get("org"),
+    }
+
+    click = await create_click(db, uuid_link=user_uuid, **extra_kwargs)
+    return {
+        "message": "New click registered successfully",
+        "data": ClickResponse.model_validate(click)
+    }
 
 
 @router.delete("/all")
@@ -69,7 +92,7 @@ async def get_click_endpoint(id: int, db=Depends(get_db)):
     return ClickResponse.model_validate(click)
 
 
-@router.get("/add/{uuid_click}", response_model=ClickResponse)
+@router.get("/add/{uuid_click}")
 async def add_click_endpoint(uuid_click: str, request: Request, db=Depends(get_db)):
     click = await get_click_by_uuid(db, uuid_click)
     if not click:
@@ -77,6 +100,11 @@ async def add_click_endpoint(uuid_click: str, request: Request, db=Depends(get_d
     click = await add_click(db, request, click)
     # Замість example.com вставте потрібний URL
     return RedirectResponse(url="https://google.com", status_code=302)
+    # return {
+    #     "message": True,
+    #     "detail": "Click added successfully",
+    #     "data": ClickResponse.model_validate(click)
+    # }
 
 
 @router.delete("/{id}")

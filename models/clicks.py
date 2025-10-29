@@ -13,6 +13,12 @@ class Click(Base):
     country = Column(String(100), nullable=True)
     region = Column(String(100), nullable=True)
     city = Column(String(100), nullable=True)
+    zip = Column(String(20), nullable=True)
+    lat = Column(String(50), nullable=True)
+    lon = Column(String(50), nullable=True)
+    timezone = Column(String(100), nullable=True)
+    isp = Column(String(100), nullable=True)
+    org = Column(String(100), nullable=True)
     created_at = Column(DateTime(timezone=True),
                         server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(
