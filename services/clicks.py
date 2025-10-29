@@ -31,8 +31,8 @@ async def create_click(db: AsyncSession, ip: str | None, uuid_link: str, geo: di
         region=geo["region"],
         city=geo["city"],
         created_at=now,
-        last_click=now,
-        total_clicks=0
+        updated_at=now,
+        total_clicks=0,
     )
     db.add(click)
     await db.commit()
@@ -48,14 +48,14 @@ async def add_click(db: AsyncSession, request: Request, click: Click, ):
     click.city = geo["city"]
     click.total_clicks += 1
     click.ip = ip
-    click.last_click = datetime.utcnow()
+    click.updated_at = datetime.utcnow()
     await db.commit()
     await db.refresh(click)
     return click
 
 
 async def update_last_click(db: AsyncSession, click: Click):
-    click.last_click = datetime.utcnow()
+    click.updated_at = datetime.utcnow()
     await db.commit()
     await db.refresh(click)
     return click

@@ -2,22 +2,16 @@
 FastAPI Backend для трекінгу кліків
 Документація: Основний файл серверу з API endpoints
 """
-
 import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 from routes.click_routes import router as click_router
 
 from dependencies.db_deps import init_db
 
-load_dotenv()  # Завантаження змінних оточення з .env файлу
-
-BASE_URL = os.getenv("BASE_URL")
-DATABASE_URL = os.getenv("DATABASE_URL")
 
 # ==================== LIFESPAN (старт/завершення) ====================
 
@@ -67,5 +61,9 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0",
-                port=int(os.getenv("PORT", 8000)), reload=True)
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", 8000)),
+        reload=True
+    )

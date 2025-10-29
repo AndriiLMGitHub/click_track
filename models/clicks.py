@@ -15,7 +15,7 @@ class Click(Base):
     city = Column(String(100), nullable=True)
     created_at = Column(DateTime(timezone=True),
                         server_default=func.now(), nullable=False)
-    last_click = Column(DateTime(timezone=True), server_default=func.now(
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(
     ), onupdate=func.now(), nullable=False)
     total_clicks = Column(Integer, nullable=False, default=0)
 

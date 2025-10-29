@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, Trash, X, TrendingUp, MousePointer, Globe, Check, AlertCircle, MapPin, Calendar, ExternalLink, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
+import { Trash2, Trash, X, Dna, TrendingUp, MousePointer, Globe, Check, AlertCircle, MapPin, Calendar, ExternalLink, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
 
 // Компонент для показу сповіщень
 const Alert = ({ type, message, onClose, darkMode }) => {
@@ -186,6 +186,7 @@ export default function ClickTracker() {
   const [darkMode, setDarkMode] = useState(false);
 
   const API_BASE = 'https://interner-provider-click.onrender.com';
+  // const API_BASE = 'http://localhsot:8000'
 
   // Завантаження теми з localStorage при монтуванні
   useEffect(() => {
@@ -404,9 +405,10 @@ export default function ClickTracker() {
         <div className="mb-8 flex justify-center">
           <button
             onClick={registerClick}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+            className="flex bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
           >
-            Згенерувати нове посилання
+            <Dna className='me-1' />
+            Згенеруйт посилання
           </button>
         </div>
 

@@ -23,7 +23,7 @@ class ClickResponse(BaseModel):
     region: Optional[str]
     city: Optional[str]
     created_at: datetime
-    last_click: datetime
+    updated_at: datetime
     total_clicks: Optional[int]
 
     model_config = ConfigDict(from_attributes=True)

@@ -69,7 +69,7 @@ async def get_click_endpoint(id: int, db=Depends(get_db)):
     return ClickResponse.model_validate(click)
 
 
-@router.get("/add/{uuid_click}", response_model=ClickResponse)
+@router.post("/add/{uuid_click}", response_model=ClickResponse)
 async def add_click_endpoint(uuid_click: str, request: Request, db=Depends(get_db)):
     click = await get_click_by_uuid(db, uuid_click)
     if not click:
