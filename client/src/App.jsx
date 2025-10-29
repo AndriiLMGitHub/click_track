@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, Trash, X, Dna, TrendingUp, MousePointer, Globe, Check, AlertCircle, MapPin, Calendar, ExternalLink, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
+import { Trash2, Trash, X, Dna, Clock, Wifi, TrendingUp, MousePointer, Globe, Check, AlertCircle, MapPin, Calendar, ExternalLink, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
 
 // Компонент для показу сповіщень
 const Alert = ({ type, message, onClose, darkMode }) => {
