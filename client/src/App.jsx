@@ -489,7 +489,7 @@ export default function ClickTracker() {
                         <div>
                           <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Останній клік</p>
                           <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            {new Date(click.last_click).toLocaleString('uk-UA', {
+                            {new Date(click.updated_at).toLocaleString('uk-UA', {
                               day: '2-digit',
                               month: '2-digit',
                               year: 'numeric',
