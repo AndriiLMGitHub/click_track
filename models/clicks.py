@@ -1,5 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, text
+from sqlalchemy import Column, Integer, String, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
+import pytz
+
+KYIV_TZ = pytz.timezone("Europe/Kyiv")
 
 Base = declarative_base()
 
@@ -19,19 +22,19 @@ class Click(Base):
     timezone = Column(String(100), nullable=True)
     isp = Column(String(100), nullable=True)
     org = Column(String(100), nullable=True)
-    created_at = Column(
-        DateTime(timezone=True),
-        server_default=text("TIMEZONE('Europe/Kyiv', NOW())"),
-        nullable=False
-    )
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=text("TIMEZONE('Europe/Kyiv', NOW())"),
-        onupdate=text("TIMEZONE('Europe/Kyiv', NOW())"),
-        nullable=False
-    )
-
+    created_at = Column(DateTime(timezone=True),
+                        server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(
+    ), onupdate=func.now(), nullable=False)
     total_clicks = Column(Integer, nullable=False, default=0)
+
+    @property
+    def created_at_kyiv(self):
+        return self.created_at.astimezone(KYIV_TZ)
+
+    @property
+    def updated_at_kyiv(self):
+        return self.updated_at.astimezone(KYIV_TZ)
 
     def __repr__(self):
         return f"<Click(id={self.id}, ip={self.ip}, uuid_link={self.uuid_link}, total_clicks={self.total_clicks})>"
