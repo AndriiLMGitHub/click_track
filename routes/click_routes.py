@@ -2,7 +2,7 @@
     Main routes for click tracking API.
 
 """
-from services.clicks import add_click, create_click, get_all_clicks, get_click_by_id, get_click_by_uuid, update_last_click, delete_click
+from services.clicks import add_click, create_click, get_all_clicks, get_click_by_id, get_click_by_uuid, update_last_click, delete_click, get_click_by_id_for_delete
 from utils.get_user_info import get_client_ip, get_geolocation
 from schemas.click_shemas import ClickResponse, ClickResponseValidate
 from dependencies.db_deps import get_db
@@ -108,8 +108,8 @@ async def add_click_endpoint(uuid_click: str, request: Request, db=Depends(get_d
 
 
 @router.delete("/{id}")
-async def delete_click_endpoint(id: int, db=Depends(get_db)):
-    click = await get_click_by_id(db, id)
+async def delete_click_endpoint(id: int, db: AsyncSession = Depends(get_db)):
+    click = await get_click_by_id_for_delete(db, id)
     if not click:
         raise HTTPException(status_code=404, detail="Click not found")
     return await delete_click(db, click, id)

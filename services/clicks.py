@@ -16,6 +16,11 @@ async def get_click_by_id(db: AsyncSession, click_id: int):
     return result.scalar_one_or_none()
 
 
+async def get_click_by_id_for_delete(db: AsyncSession, click_id: int):
+    result = await db.execute(select(Click).where(Click.id == click_id))
+    return result.scalar_one_or_none()
+
+
 async def get_click_by_uuid(db: AsyncSession, uuid_link: str):
     result = await db.execute(select(Click).where(Click.uuid_link == uuid_link))
     return result.scalar_one_or_none()
